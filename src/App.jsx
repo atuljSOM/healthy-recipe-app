@@ -5,7 +5,7 @@ export default function HealthyRecipe() {
   const [proteinChoice, setProteinChoice] = useState("all");
 
   useEffect(() => {
-    document.title = "Daily Healthy Recipe";
+    document.title = "Healthy recipe of the day";
   }, []);
 
   const fetchRecipe = async (protein) => {
@@ -24,17 +24,17 @@ export default function HealthyRecipe() {
 
   return (
     <main className="min-h-screen bg-lime-50 px-4 py-10 flex justify-center">
-      <div className="w-full max-w-screen-xl flex justify-between">
+      <div className="w-full max-w-7xl flex flex-col lg:flex-row justify-between">
         {/* Left Ad Space */}
-        <aside className="hidden lg:block w-[160px] text-gray-400 text-sm text-center">Ad Space</aside>
+        <aside className="hidden lg:block w-[100px] text-gray-400 text-sm text-center">Ad</aside>
 
         {/* Main Content Box */}
-        <div className="flex-1 max-w-4xl bg-green-50 shadow-2xl rounded-2xl p-8 space-y-8 mx-4">
-          <h1 className="text-4xl font-extrabold text-center text-green-700">🥗 Daily Healthy Recipe</h1>
+        <div className="flex-1 max-w-5xl bg-green-50 shadow-2xl rounded-2xl p-6 sm:p-8 space-y-8 mx-2">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-green-700">🥗 Healthy recipe of the day</h1>
 
           {/* Protein Filter */}
           <div className="text-center">
-            <h2 className="text-lg font-semibold text-gray-700 mb-2">What protein are you feeling today?</h2>
+            <h2 className="text-base sm:text-lg font-semibold text-gray-700 mb-2">What protein are you feeling today?</h2>
             <select
               value={proteinChoice}
               onChange={(e) => setProteinChoice(e.target.value)}
@@ -61,7 +61,7 @@ export default function HealthyRecipe() {
               </div>
             ) : (
               <div className="space-y-8 text-gray-800 text-center">
-                <h2 className="text-2xl font-bold">{recipe.title}</h2>
+                <h2 className="text-xl sm:text-2xl font-bold">{recipe.title}</h2>
 
                 {recipe.image && (
                   <img
@@ -71,15 +71,15 @@ export default function HealthyRecipe() {
                   />
                 )}
 
-                <div className="space-y-6 mx-auto max-w-prose text-center p-6 rounded-xl bg-green-200 shadow">
-                  <div>
+                <div className="space-y-6 mx-auto max-w-prose text-center p-4 sm:p-6 rounded-xl bg-green-200 shadow">
+                  <div className="p-4 bg-white rounded-lg">
                     <h3 className="text-lg font-semibold">Ingredients:</h3>
                     <ul className="list-disc list-inside space-y-1 text-left inline-block text-gray-700">
                       {recipe.ingredients.map((item, i) => <li key={i}>{item}</li>)}
                     </ul>
                   </div>
 
-                  <div>
+                  <div className="p-4 bg-white rounded-lg">
                     <h3 className="text-lg font-semibold">Steps:</h3>
                     <div className="text-left inline-block text-gray-700 whitespace-pre-line break-words max-w-full">
                       <ol className="list-decimal list-inside space-y-1">
@@ -88,7 +88,7 @@ export default function HealthyRecipe() {
                     </div>
                   </div>
 
-                  <div>
+                  <div className="p-4 bg-white rounded-lg">
                     <p><strong>Calories:</strong> {recipe.calories ?? "N/A"} kcal</p>
 
                     <div className="mt-4">
@@ -125,13 +125,8 @@ export default function HealthyRecipe() {
           </footer>
         </div>
 
-        <div className="bg-red-500 text-white p-4 text-center rounded">
-          Tailwind Test Box
-        </div>
-
-
         {/* Right Ad Space */}
-        <aside className="hidden lg:block w-[160px] text-gray-400 text-sm text-center">Ad Space</aside>
+        <aside className="hidden lg:block w-[100px] text-gray-400 text-sm text-center">Ad</aside>
       </div>
     </main>
   );
