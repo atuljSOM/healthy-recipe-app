@@ -8,9 +8,10 @@ export default function HealthyRecipe() {
     document.title = "Healthy recipe of the day";
   }, []);
 
-  const fetchRecipe = async (protein) => {
+  const fetchRecipe = async (protein, forceRefresh = false) => {
+    const url = `/api/recipe?protein=${protein}${forceRefresh ? "&forceRefresh=true" : ""}`;
     try {
-      const response = await fetch(`/api/recipe?protein=${protein}&forceRefresh=true`);
+      const response = await fetch(url);
       const data = await response.json();
       setRecipe(data);
     } catch (error) {
@@ -19,7 +20,7 @@ export default function HealthyRecipe() {
   };
 
   useEffect(() => {
-    fetchRecipe(proteinChoice);
+    fetchRecipe(proteinChoice); // cache-aware fetch
   }, [proteinChoice]);
 
   return (
@@ -51,6 +52,14 @@ export default function HealthyRecipe() {
               <option value="fish">Fish</option>
               <option value="shrimp">Shrimp</option>
             </select>
+
+            {/* Manual Refresh Button */}
+            <button
+              onClick={() => fetchRecipe(proteinChoice, true)}
+              className="mt-3 text-sm text-blue-500 underline"
+            >
+              Refresh Recipe
+            </button>
           </div>
 
           {/* Recipe Display */}
@@ -71,15 +80,15 @@ export default function HealthyRecipe() {
                   />
                 )}
 
-                <div className="space-y-6 mx-auto w-full sm:w-4/5 text-center p-4 sm:p-6 rounded-xl bg-green-200 shadow">
-                  <div className="p-6 bg-white rounded-lg w-full">
+                <div className="space-y-6 mx-auto w-full sm:w-4/5 text-center p-6 rounded-xl bg-green-200 shadow">
+                  <div className="p-4 bg-white rounded-lg">
                     <h3 className="text-lg font-semibold">Ingredients:</h3>
-                    <ul className="list-disc list-inside space-y-1 text-left inline-block text-gray-700 w-full">
+                    <ul className="list-disc list-inside space-y-1 text-left inline-block text-gray-700">
                       {recipe.ingredients.map((item, i) => <li key={i}>{item}</li>)}
                     </ul>
                   </div>
 
-                  <div className="p-6 bg-white rounded-lg w-full">
+                  <div className="p-4 bg-white rounded-lg">
                     <h3 className="text-lg font-semibold">Steps:</h3>
                     <div className="text-left inline-block text-gray-700 whitespace-pre-line break-words max-w-full">
                       <ol className="list-decimal list-inside space-y-1">
@@ -88,13 +97,13 @@ export default function HealthyRecipe() {
                     </div>
                   </div>
 
-                  <div className="p-6 bg-white rounded-lg w-full">
+                  <div className="p-4 bg-white rounded-lg">
                     <p><strong>Calories:</strong> {recipe.calories ?? "N/A"} kcal</p>
 
                     <div className="mt-4">
                       <h3 className="font-semibold">Nutritional Info:</h3>
                       {recipe.nutrients?.length > 0 ? (
-                        <ul className="list-disc list-inside text-left inline-block text-gray-700 w-full">
+                        <ul className="list-disc list-inside text-left inline-block text-gray-700">
                           {recipe.nutrients.map((n, i) => <li key={i}>{n}</li>)}
                         </ul>
                       ) : (
