@@ -9,17 +9,19 @@ export default async function handler(req, res) {
   const { protein = "all", forceRefresh = "false" } = req.query;
   const apiKey = process.env.SPOONACULAR_API_KEY;
   const today = new Date().toISOString().split("T")[0];
-  const cacheKey = "recipe:" + protein + ":" + today;
+  const cacheKey = `recipe:${protein}:${today}`;
 
   if (!apiKey) {
     return res.status(500).json({ error: "Missing API key" });
   }
 
+  // 🔹 Try to return cached recipe unless forceRefresh is true
   if (forceRefresh !== "true") {
     try {
       const cached = await redis.get(cacheKey);
       if (cached) {
-        return res.status(200).json(cached);
+        const parsed = typeof cached === "string" ? JSON.parse(cached) : cached;
+        return res.status(200).json(parsed);
       }
     } catch (err) {
       console.warn("Redis lookup failed:", err);
@@ -33,8 +35,7 @@ export default async function handler(req, res) {
       addRecipeInformation: "true",
       fillIngredients: "true",
       instructionsRequired: "true",
-      addRecipeInformation: "true",
-      addRecipeNutrition: "true",   // ✅ Required for nutrient filters to work!
+      addRecipeNutrition: "true", // ✅ Required for nutrient filters
       minProtein: "10",
       maxCalories: "500",
       apiKey,
@@ -44,7 +45,7 @@ export default async function handler(req, res) {
       searchParams.append("query", protein);
     }
 
-    const searchUrl = "https://api.spoonacular.com/recipes/complexSearch?" + searchParams.toString();
+    const searchUrl = `https://api.spoonacular.com/recipes/complexSearch?${searchParams.toString()}`;
     const searchRes = await fetch(searchUrl);
     const searchData = await searchRes.json();
 
@@ -58,7 +59,7 @@ export default async function handler(req, res) {
     const fullData = await infoRes.json();
 
     const nutrients = fullData?.nutrition?.nutrients?.map(n =>
-      n.name + ": " + n.amount + " " + n.unit
+      `${n.name}: ${n.amount} ${n.unit}`
     ) || [];
 
     const responseData = {
@@ -73,7 +74,8 @@ export default async function handler(req, res) {
       affiliateLink: fullData.sourceUrl || null,
     };
 
-    await redis.set(cacheKey, responseData, { ex: 86400 });
+    // 🔹 Cache the structured JSON as string
+    await redis.set(cacheKey, JSON.stringify(responseData), { ex: 86400 });
 
     res.status(200).json(responseData);
   } catch (err) {
