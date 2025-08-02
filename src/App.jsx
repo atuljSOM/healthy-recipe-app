@@ -8,10 +8,9 @@ export default function HealthyRecipe() {
     document.title = "Healthy recipe of the day";
   }, []);
 
-  const fetchRecipe = async (protein, forceRefresh = false) => {
-    const url = `/api/recipe?protein=${protein}${forceRefresh ? "&forceRefresh=true" : ""}`;
+  const fetchRecipe = async (protein) => {
     try {
-      const response = await fetch(url);
+      const response = await fetch(`/api/recipe?protein=${protein}`);
       const data = await response.json();
       setRecipe(data);
     } catch (error) {
@@ -20,7 +19,7 @@ export default function HealthyRecipe() {
   };
 
   useEffect(() => {
-    fetchRecipe(proteinChoice); // cache-aware fetch
+    fetchRecipe(proteinChoice);
   }, [proteinChoice]);
 
   return (
@@ -52,14 +51,6 @@ export default function HealthyRecipe() {
               <option value="fish">Fish</option>
               <option value="shrimp">Shrimp</option>
             </select>
-
-            {/* Manual Refresh Button */}
-            <button
-              onClick={() => fetchRecipe(proteinChoice, true)}
-              className="mt-3 text-sm text-blue-500 underline"
-            >
-              Refresh Recipe
-            </button>
           </div>
 
           {/* Recipe Display */}
@@ -73,70 +64,3 @@ export default function HealthyRecipe() {
                 <h2 className="text-xl sm:text-2xl font-bold">{recipe.title}</h2>
 
                 {recipe.image && (
-                  <img
-                    src={recipe.image}
-                    alt={recipe.title}
-                    className="rounded-xl shadow mx-auto max-w-full h-auto max-h-96"
-                  />
-                )}
-
-                <div className="space-y-6 mx-auto w-full sm:w-4/5 text-center p-6 rounded-xl bg-green-200 shadow">
-                  <div className="p-4 bg-white rounded-lg">
-                    <h3 className="text-lg font-semibold">Ingredients:</h3>
-                    <ul className="list-disc list-inside space-y-1 text-left inline-block text-gray-700">
-                      {recipe.ingredients.map((item, i) => <li key={i}>{item}</li>)}
-                    </ul>
-                  </div>
-
-                  <div className="p-4 bg-white rounded-lg">
-                    <h3 className="text-lg font-semibold">Steps:</h3>
-                    <div className="text-left inline-block text-gray-700 whitespace-pre-line break-words max-w-full">
-                      <ol className="list-decimal list-inside space-y-1">
-                        {recipe.steps.map((step, i) => <li key={i}>{step}</li>)}
-                      </ol>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-white rounded-lg">
-                    <p><strong>Calories:</strong> {recipe.calories ?? "N/A"} kcal</p>
-
-                    <div className="mt-4">
-                      <h3 className="font-semibold">Nutritional Info:</h3>
-                      {recipe.nutrients?.length > 0 ? (
-                        <ul className="list-disc list-inside text-left inline-block text-gray-700">
-                          {recipe.nutrients.map((n, i) => <li key={i}>{n}</li>)}
-                        </ul>
-                      ) : (
-                        <p className="text-sm italic text-gray-500">Nutrient details are not available for this recipe.</p>
-                      )}
-                    </div>
-                  </div>
-
-                  {recipe.affiliateLink && (
-                    <a
-                      href={recipe.affiliateLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-green-700 underline block mt-4"
-                    >
-                      View Full Recipe Source
-                    </a>
-                  )}
-                </div>
-              </div>
-            )
-          ) : (
-            <p className="text-center text-gray-500">Loading recipe...</p>
-          )}
-
-          <footer className="text-center text-sm text-gray-400 pt-6">
-            © {new Date().getFullYear()} DailyHealthyRecipe. All rights reserved.
-          </footer>
-        </div>
-
-        {/* Right Ad Space */}
-        <aside className="hidden lg:block w-[60px] text-gray-400 text-sm text-center">Ad</aside>
-      </div>
-    </main>
-  );
-}
