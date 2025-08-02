@@ -26,10 +26,10 @@ export default function HealthyRecipe() {
     <main className="min-h-screen bg-lime-50 px-4 py-10 flex justify-center">
       <div className="w-full max-w-7xl flex flex-col lg:flex-row justify-between">
         {/* Left Ad Space */}
-        <aside className="hidden lg:block w-[100px] text-gray-400 text-sm text-center">Ad</aside>
+        <aside className="hidden lg:block w-[60px] text-gray-400 text-sm text-center">Ad</aside>
 
         {/* Main Content Box */}
-        <div className="flex-1 max-w-5xl bg-green-50 shadow-2xl rounded-2xl p-6 sm:p-8 space-y-8 mx-2">
+        <div className="flex-1 max-w-6xl bg-green-50 shadow-2xl rounded-2xl p-6 sm:p-8 space-y-8 mx-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-green-700">🥗 Healthy recipe of the day</h1>
 
           {/* Protein Filter */}
@@ -126,7 +126,7 @@ export default function HealthyRecipe() {
         </div>
 
         {/* Right Ad Space */}
-        <aside className="hidden lg:block w-[100px] text-gray-400 text-sm text-center">Ad</aside>
+        <aside className="hidden lg:block w-[60px] text-gray-400 text-sm text-center">Ad</aside>
       </div>
     </main>
   );
