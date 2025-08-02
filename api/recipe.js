@@ -33,6 +33,10 @@ export default async function handler(req, res) {
       addRecipeInformation: "true",
       fillIngredients: "true",
       instructionsRequired: "true",
+      addRecipeInformation: "true",
+      addRecipeNutrition: "true",   // ✅ Required for nutrient filters to work!
+      minProtein: "10",
+      maxCalories: "500",
       apiKey,
     });
 
