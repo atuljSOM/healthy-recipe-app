@@ -8,10 +8,9 @@ export default function HealthyRecipe() {
     document.title = "Healthy recipe of the day";
   }, []);
 
-  const fetchRecipe = async (protein, forceRefresh = false) => {
-    const url = `/api/recipe?protein=${protein}${forceRefresh ? "&forceRefresh=true" : ""}`;
+  const fetchRecipe = async (protein) => {
     try {
-      const response = await fetch(url);
+      const response = await fetch(`/api/recipe?protein=${protein}`);
       const data = await response.json();
       setRecipe(data);
     } catch (error) {
@@ -20,7 +19,7 @@ export default function HealthyRecipe() {
   };
 
   useEffect(() => {
-    fetchRecipe(proteinChoice); // cache-aware fetch
+    fetchRecipe(proteinChoice);
   }, [proteinChoice]);
 
   return (
@@ -52,14 +51,6 @@ export default function HealthyRecipe() {
               <option value="fish">Fish</option>
               <option value="shrimp">Shrimp</option>
             </select>
-
-            {/* Manual Refresh Button */}
-            <button
-              onClick={() => fetchRecipe(proteinChoice, true)}
-              className="mt-3 text-sm text-blue-500 underline"
-            >
-              Refresh Recipe
-            </button>
           </div>
 
           {/* Recipe Display */}
