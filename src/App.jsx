@@ -71,15 +71,15 @@ export default function HealthyRecipe() {
                   />
                 )}
 
-                <div className="space-y-6 mx-auto max-w-prose text-center p-4 sm:p-6 rounded-xl bg-green-200 shadow">
-                  <div className="p-4 bg-white rounded-lg">
+                <div className="space-y-6 mx-auto w-full sm:w-4/5 text-center p-4 sm:p-6 rounded-xl bg-green-200 shadow">
+                  <div className="p-6 bg-white rounded-lg w-full">
                     <h3 className="text-lg font-semibold">Ingredients:</h3>
-                    <ul className="list-disc list-inside space-y-1 text-left inline-block text-gray-700">
+                    <ul className="list-disc list-inside space-y-1 text-left inline-block text-gray-700 w-full">
                       {recipe.ingredients.map((item, i) => <li key={i}>{item}</li>)}
                     </ul>
                   </div>
 
-                  <div className="p-4 bg-white rounded-lg">
+                  <div className="p-6 bg-white rounded-lg w-full">
                     <h3 className="text-lg font-semibold">Steps:</h3>
                     <div className="text-left inline-block text-gray-700 whitespace-pre-line break-words max-w-full">
                       <ol className="list-decimal list-inside space-y-1">
@@ -88,13 +88,13 @@ export default function HealthyRecipe() {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-white rounded-lg">
+                  <div className="p-6 bg-white rounded-lg w-full">
                     <p><strong>Calories:</strong> {recipe.calories ?? "N/A"} kcal</p>
 
                     <div className="mt-4">
                       <h3 className="font-semibold">Nutritional Info:</h3>
                       {recipe.nutrients?.length > 0 ? (
-                        <ul className="list-disc list-inside text-left inline-block text-gray-700">
+                        <ul className="list-disc list-inside text-left inline-block text-gray-700 w-full">
                           {recipe.nutrients.map((n, i) => <li key={i}>{n}</li>)}
                         </ul>
                       ) : (
