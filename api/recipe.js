@@ -1,6 +1,9 @@
+import { Redis } from "@upstash/redis";
 
-
-import { kv } from "@vercel/kv";
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 export default async function handler(req, res) {
   const { protein = "all", forceRefresh = "false" } = req.query;
@@ -14,7 +17,7 @@ export default async function handler(req, res) {
 
   if (forceRefresh !== "true") {
     try {
-      const cached = await kv.get(cacheKey);
+      const cached = await redis.get(cacheKey);
       if (cached) {
         return res.status(200).json(cached);
       }
@@ -66,7 +69,7 @@ export default async function handler(req, res) {
       affiliateLink: fullData.sourceUrl || null,
     };
 
-    await kv.set(cacheKey, responseData, { ex: 86400 });
+    await redis.set(cacheKey, responseData, { ex: 86400 });
 
     res.status(200).json(responseData);
   } catch (err) {
